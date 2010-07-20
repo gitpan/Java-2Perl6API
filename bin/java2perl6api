@@ -39,12 +39,13 @@ my @classes = @ARGV
     or die "usage: $0 [options] class [ class ... ]\nUse $0 --help for help\n";
 
 if ($opt_check) {
+    # XXX fix to be portable to windows
     my $perl6_ver = qx{perl6 --version 2>&1};
     if ($perl6_ver) {
         print "perl6: $perl6_ver\n";
     }
     else {
-        warn "perl6 not available: $perl6_ver\n";
+        warn "perl6 not available so --check disabled\n";
         $opt_check = 0;
     }
 }
@@ -96,6 +97,12 @@ for my $class (sort keys %java_class_info) {
     });
     $info->{output_filename} = $file_name;
     warn "wrote $file_name - $info->{kind} $class\n" if $opt_trace && $file_name;
+    if ($opt_trace) {
+        warn "\t uses @{ $info->{refers_to_classes} }\n"
+            if @{ $info->{refers_to_classes} };
+        warn "\t used by @{ $info->{referred_to_by_classes} }\n"
+            if @{ $info->{referred_to_by_classes} || [] };
+    }
 }
 
 for my $class (sort keys %java_class_info) {
@@ -106,12 +113,6 @@ for my $class (sort keys %java_class_info) {
         or next;
 
     warn "checking $file_name - $info->{kind} $class\n" if $opt_trace;
-    if ($opt_trace) {
-        warn "\t uses @{ $info->{refers_to_classes} }\n"
-            if @{ $info->{refers_to_classes} };
-        warn "\t used by @{ $info->{referred_to_by_classes} }\n"
-            if @{ $info->{referred_to_by_classes} || [] };
-    }
 
     (my $pirfile = $file_name) =~ s/\.pm6$/.pir/;
     # we're effectively doing perl6 -c here but we don't use -c

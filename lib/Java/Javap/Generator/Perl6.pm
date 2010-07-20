@@ -238,18 +238,18 @@ sub _get_prologue {
 
     my %perl_types;
 
-    $perl_types{ $ast->{cast_parent} }++ if $ast->{cast_parent};
-    $perl_types{ $_ }++ for @{ $ast->{cast_implements} };
+    $perl_types{ $ast->{cast_parent} }{parent} = 1 if $ast->{cast_parent};
+    $perl_types{ $_ }{implements} = 1 for @{ $ast->{cast_implements} };
 
     foreach my $element (@{$ast->{contents}}) {
 
         if ($element->{body_element} =~ /^(method|constructor)/) {
             foreach my $arg (@{$element->{args}}) {
-                $perl_types{$arg->{perl_type_name}}++;
+                $perl_types{$arg->{perl_type_name}}{arg}++;
             }
         }
 
-        $perl_types{ $element->{type}->{perl_type_name} }++
+        $perl_types{ $element->{type}->{perl_type_name} }{return}++
             if ref $element->{type};
     }
 
@@ -278,7 +278,19 @@ sub _get_prologue {
     # to (at least for now) because: essentially  "class Foo { ... }"  simply
     # declares Foo as a package-ish identifier -- per pmichaud.
     # So we can get away with this cheat.
-    return map { "class $_ { ... };" } sort keys %perl_types;
+    # But not for all kinds of usage: 'is' and 'does' need to 'use' first
+    my (@decl_class, @load_class);
+    while ( my ($type, $usage) = each %perl_types) {
+        if ($usage->{parent} || $usage->{implements}) {
+            push @load_class, $type;
+            next;
+        }
+        push @decl_class, $type;
+    }
+    return (
+        map({ "class $_ { ... };" } sort @decl_class),
+        map({ "use   $_;"         } sort @load_class)
+    );
 }
 
 
@@ -325,6 +337,7 @@ method [% elem.name -%]
 [% INCLUDE method_all_args elem = elem %]
 [% INCLUDE method_returns ret = elem.type %]
     ) { ... }
+[%- IF elem.throws.size %] # throws [% elem.throws.join(", ") %][% END +%]
 
 [% END %]
 [% BLOCK constant_whole %]
@@ -342,6 +355,7 @@ sub _get_template_for_interface {
 
 role [% ast.perl_qualified_name %]
     [%- IF ast.cast_parent != '' %] does [% ast.cast_parent %] [% END -%]
+    [%- IF ast.cast_implements.size > 0 %] does [% ast.cast_implements.join(" does ") %] [% END -%]
  {
 
 [% FOREACH element IN ast.constant_list %]

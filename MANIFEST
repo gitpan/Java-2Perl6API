@@ -1,4 +1,5 @@
 Changes
+DBDI.pm6
 LICENSE
 MANIFEST
 META.json
@@ -7,8 +8,9 @@ README
 TODO
 bin/java2perl6api
 bin/p5grammar
+dbdi-init.sh
+dbdi.pl6
 dist.ini
-jdbc_classes.txt
 lib/Java/Javap.pm
 lib/Java/Javap/Generator.pm
 lib/Java/Javap/Generator/Perl6.pm
@@ -16,7 +18,6 @@ lib/Java/Javap/Grammar.pm
 lib/Java/Javap/Parserpm
 lib/Java/Javap/TypeCast.pm
 lib/Java/Javap/javap.grammar
-mkjdbc.pl
 t/01_use.t
 t/02_interface.t
 t/03_class.t
