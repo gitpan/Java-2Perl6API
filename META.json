@@ -4,7 +4,7 @@
       "Tim Bunce <Tim.Bunce@pobox.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.101612, CPAN::Meta::Converter version 2.101610",
+   "generated_by" : "Dist::Zilla version 4.101900, CPAN::Meta::Converter version 2.101610",
    "license" : [
       "perl_5"
    ],
@@ -21,7 +21,7 @@
       },
       "runtime" : {
          "requires" : {
-            "Parse::RecDescent" : "1.0",
+            "Parse::RecDescent" : "1.965001",
             "Template" : "2.0",
             "Test::Differences" : 0,
             "Test::More" : "0.82",
@@ -37,6 +37,6 @@
          "web" : "http://github.com/timbunce/java2perl6"
       }
    },
-   "version" : "0.09"
+   "version" : "0.11"
 }
 

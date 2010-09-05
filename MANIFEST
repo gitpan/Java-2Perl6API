@@ -1,6 +1,4 @@
 Changes
-DBDI.pm6
-DBDI_pg.pm6
 LICENSE
 MANIFEST
 META.json
@@ -8,9 +6,6 @@ Makefile.PL
 README
 TODO
 bin/java2perl6api
-bin/p5grammar
-dbdi-init.sh
-dbdi.pl6
 dist.ini
 lib/Java/Javap.pm
 lib/Java/Javap/Generator.pm
@@ -19,14 +14,13 @@ lib/Java/Javap/Grammar.pm
 lib/Java/Javap/Parserpm
 lib/Java/Javap/TypeCast.pm
 lib/Java/Javap/javap.grammar
-libpq-test.pl6
-libpq.pm6
 t/01_use.t
 t/02_interface.t
 t/03_class.t
 t/22_invoke_javap.t
 t/55_final.t
 t/70_java2perl6.t
+t/80_j_s_date.t
 t/release-pod-syntax.t
 testjavas/ClassTest.class
 testjavas/ClassTest.java

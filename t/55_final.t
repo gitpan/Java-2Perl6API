@@ -20,9 +20,10 @@ plan tests    => 1;
 #--------------------------------------------------------------------
 
 my $parser = Java::Javap::Grammar->new();
-my $decomp = Java::Javap->javap('FinalClassTest', {-classpath => 'testjavas'});
+my $decomp = Java::Javap->javap('FinalClassTest', [ qw(-verbose -classpath testjavas) ]);
 
-my $tree   = $parser->comp_unit( $decomp );
+my $tree   = $parser->comp_unit( $decomp )
+    or die "Error parsing:\n$decomp";
 
 my $expected_tree = {
           'parent' => 'java.lang.Object',

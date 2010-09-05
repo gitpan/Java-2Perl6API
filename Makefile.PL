@@ -17,19 +17,18 @@ my %WriteMakefileArgs = (
   },
   'DISTNAME' => 'Java-2Perl6API',
   'EXE_FILES' => [
-    'bin/java2perl6api',
-    'bin/p5grammar'
+    'bin/java2perl6api'
   ],
   'LICENSE' => 'perl',
   'NAME' => 'Java::2Perl6API',
   'PREREQ_PM' => {
-    'Parse::RecDescent' => '1.0',
+    'Parse::RecDescent' => '1.965001',
     'Template' => '2.0',
     'Test::Differences' => '0',
     'Test::More' => '0.82',
     'Test::Most' => '0'
   },
-  'VERSION' => '0.09',
+  'VERSION' => '0.11',
   'test' => {
     'TESTS' => 't/*.t'
   }

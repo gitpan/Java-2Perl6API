@@ -22,9 +22,10 @@ plan tests    => 3;
 #--------------------------------------------------------------------
 
 my $parser = Java::Javap::Grammar->new();
-my $decomp = Java::Javap->javap('ClassTest', {-classpath=>'testjavas'});
+my $decomp = Java::Javap->javap('ClassTest', [ qw(-verbose -classpath testjavas) ]);
 
-my $tree   = $parser->comp_unit( $decomp );
+my $tree   = $parser->comp_unit( $decomp )
+    or die "Error parsing:\n$decomp";
 
 my $expected_tree = {
           'parent' => 'java.lang.Object',
@@ -224,7 +225,7 @@ eq_or_diff( \@perl_6, \@correct_perl_6, 'emission' )
 #--------------------------------------------------------------------
 {
   my $parser = Java::Javap::Grammar->new();
-  my $decomp = Java::Javap->javap('dupMethodTest', {-classpath=>'testjavas'});
+  my $decomp = Java::Javap->javap('dupMethodTest', [ qw(-verbose -classpath testjavas) ]);
 
   my $tree   = $parser->comp_unit( $decomp );
 
@@ -248,7 +249,10 @@ use v6;
 
 role dupMethodTest {
 
-    method USELESS_CONSTANT (--> Int) is export { ... }
+    method INT_CONST (--> Int) is export { 4 }
+    method FLOAT_CONST (--> Num) is export { 4.2 }
+    method A_STRING_CONST (--> Str) is export { "A \"string\"" }
+    method B_STRING_CONST (--> Str) is export { "A 'str' & \u0008ack" }
 
     method new (
     --> dupMethodTest   #  dupMethodTest
